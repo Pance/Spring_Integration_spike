@@ -1,0 +1,13 @@
+apply plugin: 'java'
+
+project.ext {
+	springVersion = "3.2.3.RELEASE"
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile "org.springframework:spring-context:$project.ext.springVersion"
+}

@@ -6,7 +6,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 @MessageEndpoint
 public class BarMessageService {
 
-	@ServiceActivator(inputChannel="bar", outputChanne="out")
+	@ServiceActivator(inputChannel="bar", outputChannel="out")
 	public String getMessage(String message) {
 		System.out.println("Bar: " + message);
 		return message;

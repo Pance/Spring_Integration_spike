@@ -2,12 +2,19 @@ apply plugin: 'java'
 
 project.ext {
 	springVersion = "3.2.3.RELEASE"
+	springIntegrationVersion = "2.2.3.RELEASE"
 }
 
 repositories {
+	maven {
+		id = "repository.springframework.maven.release"
+		name = "Spring Framework Maven Release Repository"
+		url = "http://repo.springsource.org/release"
+	}
 	mavenCentral()
 }
 
 dependencies {
-	compile "org.springframework:spring-context:$project.ext.springVersion"
+	//compile "org.springframework:spring-context:$project.ext.springVersion"
+	compile "org.springframework.integration:spring-integration-core:$project.ext.springIntegrationVersion"
 }

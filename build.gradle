@@ -18,3 +18,8 @@ dependencies {
 	//compile "org.springframework:spring-context:$project.ext.springVersion"
 	compile "org.springframework.integration:spring-integration-core:$project.ext.springIntegrationVersion"
 }
+
+task (runSpike, dependsOn: 'classes', type: JavaExec) {
+	main = "SpikeMain"
+	classpath = sourceSets.main.runtimeClasspath
+}

@@ -18,7 +18,9 @@
 
 	<integration:channel id="foo"/>
 	<integration:channel id="bar"/>
-	<integration:channel id="out"/>
+	<integration:channel id="out">
+		<integration:queue capacity="100"/>
+	</integration:channel>
 
 </beans>
 

@@ -20,7 +20,5 @@
 	<integration:channel id="bar"/>
 	<integration:channel id="out"/>
 
-	<bean id="fooMessageService" class="com.pance.springIntSpike.FooMessageService"/>
-	<bean id="barMessageService" class="com.pance.springIntSpike.BarMessageService"/>
-
 </beans>
+

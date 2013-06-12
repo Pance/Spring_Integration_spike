@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:jms="http://www.springframework.org/schema/integration/jms"
        xmlns:integration="http://www.springframework.org/schema/integration"
        xmlns:stream="http://www.springframework.org/schema/integration/stream"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -11,16 +12,48 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-3.0.xsd
                            http://www.springframework.org/schema/integration/stream
-                           http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
-
+                           http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+													 http://www.springframework.org/schema/integration/jms
+													 http://www.springframework.org/schema/integration/jms/spring-integration-jms-2.2.xsd">
 	<integration:annotation-config/>
 	<context:component-scan base-package="com.pance.springIntSpike" />
 
+	<bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory">
+			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+				<!-- <property name="brokerURL" value="tcp://localhost:61616"/> -->
+				<property name="brokerURL" value="vm://localhost"/>
+			</bean>
+		</property>
+		<property name="sessionCacheSize" value="10"/>
+		<property name="cacheProducers" value="false"/>
+	</bean>
+
+	<!-- JMS messages enter the application through this queue -->
+	<bean id="incomingQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="spike.consume"/>
+	</bean>
+
+	<!-- this adapter moves JMS msgs from incomingQueue to channel foo -->
+	<jms:message-driven-channel-adapter id="inQ_to_foo_adapter"
+			 destination="incomingQueue"
+			 channel="foo" />
 	<integration:channel id="foo"/>
+	
+	<!-- messages are picked up from channel foo by FooMessageService -->
+	<!-- FooMessageService will put messages into channel bar -->
 	<integration:channel id="bar"/>
-	<integration:channel id="out">
-		<integration:queue capacity="100"/>
-	</integration:channel>
+
+	<!-- messages in channel bar are picked up by BarMessageService -->
+	<!-- BarMessageService will put messages into channel quu -->
+	<integration:channel id="quu" />
+
+	<!-- this adapter moves messages from channel quu into outgoingQueue -->
+	<jms:outbound-channel-adapter id="quu_to_outQ_adapter"
+					 channel="quu"
+					 destination="outgoingQueue" />
+	<bean id="outgoingQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="spike.produce"/>
+	</bean>
 
 </beans>
-

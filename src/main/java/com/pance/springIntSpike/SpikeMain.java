@@ -9,9 +9,9 @@ public class SpikeMain {
 	public static void main(String[] args) {
 		AbstractApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring-context.xml", SpikeMain.class);
 		MessageChannel fooChannel = context.getBean("foo", MessageChannel.class);
-		PollableChannel outChannel = context.getBean("out", PollableChannel.class);
+		PollableChannel quuChannel = context.getBean("quu", PollableChannel.class);
 		
 		fooChannel.send(new GenericMessage<String>("blah"));
-		System.out.println("got: " + outChannel.receive(0).getPayload());
+		System.out.println("got: " + quuChannel.receive(0).getPayload());
 	}
 }
